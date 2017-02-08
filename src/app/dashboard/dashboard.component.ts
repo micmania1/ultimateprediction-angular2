@@ -10,12 +10,10 @@ import { StandingsSummary } from '../app.types';
   template: require('!raw-loader!./dashboard.component.html')
 })
 export class DashboardComponent implements OnInit {
-  @Input() minUpcomingSuccessPercent: number = 100;
-  @Input() minUpcomingWarningPercent: number = 70;
-
   public pageTitle: string = 'Dashboard';
   public predictionsLink: string = ROUTE_MAP['LOGIN'];
 
+  // child component state
   public standings_widget_1: StandingsSummary = null;
   public standings_widget_2: StandingsSummary = null;
   public upcomingMatchesCount: number = 0;
