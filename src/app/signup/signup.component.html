@@ -1,0 +1,72 @@
+<toolbar [leftNavLink]="homeLink" [title]="pageTitle"></toolbar>
+
+<div class="row social-signup">
+  <div class="col">
+    <p>The easiest way to sign up is using your Facebook or Twitter account. Choose one of the options below and you&#039;ll be playing in no time.</p>
+    <div class="social-button">
+      <facebook-button (onAttemptLogin)="attemptFacebookSignup()" [disableButton]="signupInProgress"></facebook-button>
+    </div>
+    <div class="social-button">
+      <twitter-button (onAttemptLogin)="attemptTwitterSignup()" [disableButton]="signupInProgress"></twitter-button>
+    </div>
+  </div>
+</div>
+
+<div class="row signup-form">
+  <div class="col">
+    <p>If you prefer the old fashioned way, enter your details below and we&#039;ll create an account for you.</p>
+
+    <form [formGroup]="form" (ngSubmit)="doSubmit()" novalidate>
+      <p class="alert alert-danger" *ngIf="formError">
+        {{ formError }}
+      </p>
+
+      <div [ngClass]="{'has-danger': showErrors['displayName']}">
+        <label class="sr-only" for="displayName">Display name</label>
+        <input type="text" name="displayName" id="displayName" placeholder="Display name"
+          #displayNameInput
+          class="form-control form-control-lg"
+          [ngClass]="{'form-control-danger': showErrors['displayName']}"
+          (blur)="onValueChanges()"
+          required="required" />
+        <div *ngIf="showErrors['displayName'] && formFieldErrors['displayName']" class="form-control-feedback">
+          {{ formFieldErrors['displayName'] }}
+        </div>
+      </div>
+
+      <div [ngClass]="{'has-danger': showErrors['email']}">
+        <label class="sr-only" for="email">Email address</label>
+        <input type="text" name="email" id="email" placeholder="Email"
+          #emailInput
+          class="form-control form-control-lg"
+          [ngClass]="{'form-control-danger': showErrors['email']}"
+          (blur)="onValueChanges()"
+          required="required" />
+        <div *ngIf="showErrors['email'] && formFieldErrors['email']" class="form-control-feedback">
+          {{ formFieldErrors['email'] }}
+        </div>
+      </div>
+
+      <div [ngClass]="{'has-danger': showErrors['password']}">
+        <label class="sr-only" for="password">Password</label>
+        <input type="text" name="password" id="password" placeholder="Password"
+          #passwordInput
+          class="form-control form-control-lg"
+          [ngClass]="{'form-control-danger': showErrors['password']}"
+          (blur)="onValueChanges()"
+          required="required" />
+        <div *ngIf="showErrors['password'] && formFieldErrors['password']" class="form-control-feedback">
+          {{ formFieldErrors['password'] }}
+        </div>
+      </div>
+
+      <fieldset class="form-actions">
+        <button type="submit"
+          [disabled]="signupInProgress || (displayName === '' || email === '' || password === '') || submitted && !form.valid"
+          class="btn btn-block btn-primary btn-lg">
+          Signup
+        </button>
+      </fieldset>
+    </form>
+  </div>
+</div>

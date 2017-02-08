@@ -1,0 +1,23 @@
+@include media-breakpoint-up(xs) {
+  html {
+    font-size: $font-size-xs;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  html {
+    font-size: $font-size-sm;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  html {
+    font-size: $font-size-base;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  html {
+    font-size: $font-size-lg;
+  }
+}

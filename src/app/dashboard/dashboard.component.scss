@@ -1,0 +1,12 @@
+@import '../../scss/variables';
+
+$cmp-padding: 2.25rem;
+
+.dashboard__widget {
+  padding: 0;
+}
+
+.upcoming {
+  background-color: lighten($brand-color-black, 10%);
+  padding-bottom: $cmp-padding;
+}

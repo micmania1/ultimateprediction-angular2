@@ -1,0 +1,80 @@
+<toolbar [title]="pageTitle" [leftNavLink]="homeLink"></toolbar>
+
+<div class="row login-form">
+  <div class="col">
+    <p>Enter your email address and password to login.</p>
+    <form [formGroup]="form" (ngSubmit)="doSubmit()" #loginForm novalidate>
+      <div [hidden]="!formError" class="alert alert-danger" #formErrorMsg>
+        {{ formError }}
+      </div>
+      <div [ngClass]="{'has-danger': showErrors['email']}">
+
+        <label class="sr-only" for="email">Email address</label>
+        <input type="email" id="email" formControlName="email"
+          #emailInput
+          placeholder="Email"
+          class="form-control form-control-lg"
+          [ngClass]="{'form-control-danger': showErrors['email']}"
+          (blur)="onValueChanges()"
+          required="required" />
+
+          <div [hidden]="!showErrors['email'] || !formFieldErrors['email']"
+            class="form-control-feedback"
+            #emailError>
+            {{ formFieldErrors['email'] }}
+          </div>
+
+      </div>
+
+      <div [ngClass]="{'has-danger': showErrors['password']}">
+        <label class="sr-only" for="password">Password</label>
+        <input type="password" id="password" formControlName="password"
+          #passwordInput
+          placeholder="Password"
+          class="form-control form-control-lg"
+          minlength="minPasswordLength"
+          maxlength="maxPasswordLength"
+          [ngClass]="{'form-control-danger': showErrors['password']}"
+          (blur)="onValueChanges()"
+          required="required" />
+
+          <div [hidden]="!showErrors['password'] || !formFieldErrors['password']"
+            class="form-control-feedback"
+            #passwordError>
+            {{ formFieldErrors['password'] }}
+          </div>
+
+      </div>
+
+      <fieldset class="form-actions">
+        <button type="submit"
+          #submitButton
+          [disabled]="loginInProgress || (emailInput.value === '' || passwordInput.value === '') || (submitted && !form.valid)"
+          class="btn btn-block btn-primary btn-lg">
+            Log in
+        </button>
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+<div class="row social-login">
+  <div class="col">
+    <p>Login with your Facbeook or Twitter account:</p>
+    <div class="social-button">
+      <facebook-button (onAttemptLogin)="attemptFacebookLogin()" [disableButton]="loginInProgress"></facebook-button>
+    </div>
+
+    <div class="social-button">
+      <twitter-button (onAttemptLogin)="attemptTwitterLogin()" [disableButton]="loginInProgress"></twitter-button>
+    </div>
+  </div>
+</div>
+
+<div class="row login-help" *ngIf="lostPasswordLink">
+  <div class="col">
+    <a [routerLink]="[ lostPasswordLink ]" class="btn btn-block btn-outline-primary">
+      Forgotten password?
+    </a>
+  </div>
+</div>

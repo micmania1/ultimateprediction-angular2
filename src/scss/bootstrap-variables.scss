@@ -1,0 +1,20 @@
+// Enable flexbox support in bootstrap
+$enable-flex: true;
+
+$brand-primary: $brand-color-green;
+
+$body-bg: $brand-color-black;
+$body-color: $brand-color-white;
+$link-color: $brand-color-green;
+$link-hover-color: darken($link-color, 10%);
+$link-hover-decoration: underline;
+
+$font-family-sans-serif: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+$headings-font-family: 'PT Sans Narrow', sans-serif;
+
+$font-size-base: 1rem;
+$font-size-lg:   1.25rem;
+$font-size-sm:   .875rem;
+$font-size-xs:   .875rem;
+
+@import "~bootstrap/scss/variables";

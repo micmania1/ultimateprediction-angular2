@@ -1,0 +1,9 @@
+@import '../../scss/variables';
+
+.social-button + .social-button {
+  margin-top: 0.5rem;
+}
+
+.row + .signup-form {
+  margin-top: $row-spacing;
+}

@@ -1,0 +1,21 @@
+@import '../../scss/variables';
+
+$cmp-padding: 1.5rem;
+
+.num-predictions {
+  text-align: center;
+  display: block;
+  margin: $cmp-padding 0;
+}
+
+
+.title{
+  text-align: center;
+  display: block;
+  margin: $cmp-padding 0;
+  color: $brand-color-white;
+}
+
+.btn.predictions {
+  line-height: 2.5rem;
+}

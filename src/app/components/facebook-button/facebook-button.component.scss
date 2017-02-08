@@ -1,0 +1,16 @@
+.btn-facebook {
+  text-align: left;
+  background: #3b5998;
+  color: #fff;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: darken(#3b5998, 10%);
+  }
+
+  .fa {
+    margin-right: 1rem;
+    width: 22px;
+  }
+}

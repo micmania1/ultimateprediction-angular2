@@ -1,0 +1,29 @@
+@import "../../scss/variables";
+@import '~bootstrap/scss/mixins/breakpoints';
+
+.logo {
+  margin: 4rem auto 0;
+}
+
+.home-buttons {
+  margin-top: 5rem;
+  padding-bottom: 2rem;
+
+  .btn:not(.btn-outline-primary) {
+    padding: 1.1rem 1.5rem;
+  }
+
+  .btn + .btn {
+    margin-top: 1rem;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .logo {
+    margin: 2rem auto 0;
+  }
+
+  .home-buttons {
+    margin-top: 3rem;
+  }
+}
