@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { StandingsSummary } from '../../app.types';
+import { NumeralPipe } from '../../numeral.pipe';
 
 @Component({
   selector: 'position-widget',
@@ -10,8 +11,8 @@ import { StandingsSummary } from '../../app.types';
       [ngClass]="{'widget--blue': style === 'blue', 'widget--pink': style === 'pink'}"
       (click)="navigateTo(standings.url)">
       <div class="widget__pos">
-        <span>{{ standings.pos }}<small>st</small></span>
-        <span class="of">out of {{ standings.of }}</span>
+        <span>{{ standings.pos | numeral: "Oo" }}</span>
+        <span class="of">out of {{ standings.of | numeral: "0,0" }}</span>
       </div>
       <div class="widget__title">
         <span>{{ standings.title }}</span>

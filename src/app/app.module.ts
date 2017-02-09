@@ -32,6 +32,7 @@ import {
   AuthService,
   SessionService } from './services';
 import { PredictionProgressComponent } from './prediction-progress/prediction-progress.component';
+import { NumeralPipe } from './numeral.pipe';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -67,7 +68,8 @@ type StoreType = {
     FacebookButton,
     TwitterButton,
     PositionWidget,
-    PredictionProgressComponent
+    PredictionProgressComponent,
+    NumeralPipe
   ],
   imports: [ // import Angular's modules
     BrowserModule,
