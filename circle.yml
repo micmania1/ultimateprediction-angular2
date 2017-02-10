@@ -1,0 +1,16 @@
+machine:
+  timezone:
+    Pacific/Auckland
+  node:
+    version: 7.5.0
+
+dependencies:
+  pre:
+    - npm install -g yarn
+    - npm install -g angular-cli
+  override:
+    - yarn install
+
+test:
+  override:
+    - ng test -w 0 -cc 1
