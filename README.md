@@ -1,5 +1,7 @@
 # UltimatePrediction
 
+[![CircleCI](https://circleci.com/gh/micmania1/ultimateprediction-angular2/tree/master.svg?style=svg)](https://circleci.com/gh/micmania1/ultimateprediction-angular2/tree/master)
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.28.3.
 
 ## Development server
