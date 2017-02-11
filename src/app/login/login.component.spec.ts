@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppState } from '../app.service';
-import { ApiService, AuthGuardService, AuthService } from '../services';
+import { SessionService, ApiService, AuthGuardService, AuthService } from '../services';
 import { LoginComponent } from './login.component';
 import { Toolbar, FacebookButton, TwitterButton } from '../components';
 
@@ -114,6 +114,7 @@ describe('login screen', () => {
       ],
       providers: [
         AppState,
+        SessionService,
         FormBuilder,
         AuthGuardService,
         AuthService,
@@ -146,8 +147,8 @@ describe('login screen', () => {
       expect(component.form.get('password').value).toBe('somepassword1');
       expect(component.submitted).toBeTruthy();
 
-      const state = fixture.debugElement.injector.get(AppState);
-      expect(state.get('user').displayName).toBe('testuser');
+      const session = fixture.debugElement.injector.get(SessionService);
+      expect(session.get('user').displayName).toBe('testuser');
       done();
     });
 

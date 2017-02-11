@@ -3,7 +3,7 @@
 import { TestBed, async } from '@angular/core/testing';
 import { NumeralPipe } from './numeral.pipe';
 
-describe('PositionPipe', () => {
+describe('NumeralPipe', () => {
   it('create an instance', () => {
     const pipe = new NumeralPipe();
     expect(pipe).toBeTruthy();
@@ -13,6 +13,6 @@ describe('PositionPipe', () => {
     const pipe = new NumeralPipe();
 
     let value = 1;
-    expect(pipe.transform(value, 'Oo').toEqual('1st');)
+    expect(pipe.transform(value, 'Oo')).toEqual('1st');
   });
 });

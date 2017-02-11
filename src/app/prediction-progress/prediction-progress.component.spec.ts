@@ -2,7 +2,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PredictionProgressComponent } from './prediction-progress.component';
 
 describe('PredictionProgressComponent', () => {
@@ -12,6 +14,10 @@ describe('PredictionProgressComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ PredictionProgressComponent ]
+      imports: [
+        NgbModule.forRoot(),
+        RouterTestingModule.withRoutes([])
+      ]
     })
     .compileComponents();
   }));
