@@ -13,4 +13,4 @@ dependencies:
 
 test:
   override:
-    - ng test -w 0 -cc 1
+    - ng test --watch false --code-coverage true --single-run true
