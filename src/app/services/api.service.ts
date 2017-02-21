@@ -18,12 +18,19 @@ export class ApiService {
     });
   }
 
-  public signup(displayName: string, email: string, password: string)
-  {
+  public signup(displayName: string, email: string, password: string): Promise<any> {
     return new Promise((resolve, reject) => {
       console.info('signup attempted: ' + displayName + ' ' + email + ' ' + password);
       // reject('Something is wrong. eg. non-200 response');
       resolve( { id: 1, displayName: 'micmania1' } );
+    });
+  }
+
+  public lostPassword(email: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      console.info('lostpassword attempted: ' + email);
+      // reject('Something is wrong. eg. non-200 response');
+      resolve( {} );
     });
   }
 
