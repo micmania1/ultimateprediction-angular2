@@ -18,4 +18,13 @@ export class ApiService {
     });
   }
 
+  public signup(displayName: string, email: string, password: string)
+  {
+    return new Promise((resolve, reject) => {
+      console.info('signup attempted: ' + displayName + ' ' + email + ' ' + password);
+      // reject('Something is wrong. eg. non-200 response');
+      resolve( { id: 1, displayName: 'micmania1' } );
+    });
+  }
+
 }

@@ -1,30 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ROUTE_MAP } from '../app.routes';
 import {
   MIN_PASSWORD_LENGTH,
   MAX_PASSWORD_LENGTH,
+  MIN_DISPLAY_NAME_LENGTH,
   MAX_DISPLAY_NAME_LENGTH } from '../app.config';
 import {
   emailValidator,
   passwordStrengthValidator,
   displayNameValidator } from '../app.validators';
 import { FacebookButton, TwitterButton, AbstractForm } from '../components';
-import { ApiService } from '../services';
+import { ApiService, AuthService, SessionService } from '../services';
 
 @Component({
   selector: 'signup',
   styles: [ require('!raw-loader!sass-loader!./signup.component.scss') ],
   template: require('!raw-loader!./signup.component.html')
 })
-export class SignupComponent extends AbstractForm implements OnInit{
+export class SignupComponent extends AbstractForm implements OnInit {
   public homeLink: string = ROUTE_MAP['HOME'];
   public pageTitle: string = 'Signup';
   public signupInProgress: boolean = false;
 
-  constructor(private fb: FormBuilder, private api: ApiService) {
-    super();
+  constructor(
+    private fb: FormBuilder,
+    private api: ApiService,
+    private auth: AuthService,
+    private session: SessionService,
+    private router: Router) {
+      super();
   }
 
   ngOnInit() {
@@ -36,6 +43,7 @@ export class SignupComponent extends AbstractForm implements OnInit{
      'displayName': {
        'required': 'Display name is required',
        'displayname': 'Your display name must contain only numbers, letters, - and _',
+       'minlength': `Display name must be at least ${MIN_DISPLAY_NAME_LENGTH} characters long`,
        'maxlength': `Display name must be no more than ${MAX_DISPLAY_NAME_LENGTH} characters long`
      },
       'email': {
@@ -52,6 +60,7 @@ export class SignupComponent extends AbstractForm implements OnInit{
     this.form = this.fb.group({
       'displayName': ['', [
         Validators.required,
+        Validators.minLength(MIN_DISPLAY_NAME_LENGTH),
         Validators.maxLength(MAX_DISPLAY_NAME_LENGTH),
         displayNameValidator()
       ]],
@@ -69,8 +78,47 @@ export class SignupComponent extends AbstractForm implements OnInit{
   }
 
   protected performSubmission(): Promise<string> {
-    console.info('do signup pls');
-    return Promise.resolve('resolve the promise');
+    this.signupInProgress = true;
+
+    const displayName = this.form.get('displayName').value;
+    const email = this.form.get('email').value;
+    const password = this.form.get('password').value;
+
+    return this.api.signup(displayName, email, password)
+      .then(
+        (data) => this.signupSuccess(data),
+        (reason) => this.signupFailure(reason)
+      )
+      .catch((reason) => this.signupError(reason));
+  }
+
+  /**
+   * Handle successful login
+   */
+  private signupSuccess(data: any) {
+    this.signupInProgress = false;
+    this.formError = '';
+
+    this.session.set('user', data);
+    this.auth.refresh();
+
+    this.router.navigate(['dashboard']);
+  }
+
+  /**
+   * Handle signup failure
+   */
+  private signupFailure(reason: string) {
+    this.signupInProgress = false;
+    this.formError = reason;
+  }
+
+  /**
+   * This is a generic way of handling unknown erros during signup
+   */
+  private signupError(error) {
+    this.signupInProgress = false;
+    this.formError = 'Ooop! Something went wrong and we weren\'t able to log you in.';
   }
 
   public attemptFacebookSignup() {

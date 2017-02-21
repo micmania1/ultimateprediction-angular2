@@ -5,34 +5,44 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppState } from '../app.service';
 import { SessionService, ApiService, AuthGuardService, AuthService } from '../services';
-import { LoginComponent } from './login.component';
+import { SignupComponent } from './signup.component';
 import { Toolbar, FacebookButton, TwitterButton } from '../components';
 
-const FAILED_LOGIN_REASON = 'Invalid username or password.';
+const FAILED_DUPLICATE_EMAIL = 'duplicate email error';
+const FAILED_DUPLICATE_DISPLAYNAME = 'duplicate display name error';
 
 class MockApiService {
 
-  protected accounts = {
-    'test@example.com': {
+  protected accounts = [
+    {
+      email: 'test@example.com',
       password: 'somepassword1',
       displayName: 'testuser',
     }
-  };
+  ];
 
-  public login(email: string, password: string): Promise<any> {
+  public signup(displayName: string, email: string, password: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      const account = this.accounts[email];
-      if(!account || account.password !== password) {
-        reject(FAILED_LOGIN_REASON);
-        return;
+      if(this.emailExists(email)) {
+        reject(FAILED_DUPLICATE_EMAIL);
+      } else if (this.displayNameExists(displayName)) {
+        reject(FAILED_DUPLICATE_DISPLAYNAME);
       }
 
-      resolve({ id: 1, displayName: account.displayName });
+      resolve({ id: 1, displayName: displayName });
     });
+  }
+
+  private emailExists(email: string): boolean {
+    return this.accounts.find(user => user.email === email);
+  }
+
+  private displayNameExists(displayName: string): boolean {
+    return this.accounts.find(user => user.displayName === displayName);
   }
 }
 
-describe('login screen', () => {
+describe('signup screen', () => {
 
   let fixture;
   let component;
@@ -55,12 +65,20 @@ describe('login screen', () => {
   }
 
   /** Elements **/
-  const loginForm = (): any => {
-    return getElementByReference('loginForm');
+  const form = (): any => {
+    return getElementByReference('signupForm');
   }
 
   const formErrorMsg = (): any => {
     return getElementByReference('formErrorMsg');
+  }
+
+  const displayNameInput = (): any => {
+    return getElementByReference('displayNameInput');
+  }
+
+  const displayNameError = (): any => {
+    return getElementByReference('displayNameError');
   }
 
   const emailInput = (): any => {
@@ -84,6 +102,11 @@ describe('login screen', () => {
   }
 
   /** Actions **/
+  const updateDisplayNameValue = (value: string, blur: boolean = true): any => {
+    const input = displayNameInput().nativeElement;
+    return updateInputValue(input, value, blur);
+  }
+
   const updateEmailValue = (value: string, blur: boolean = true): any => {
     const input = emailInput().nativeElement;
     return updateInputValue(input, value, blur);
@@ -107,7 +130,7 @@ describe('login screen', () => {
         RouterTestingModule.withRoutes([])
       ],
       declarations: [
-        LoginComponent,
+        SignupComponent,
         Toolbar,
         FacebookButton,
         TwitterButton
@@ -123,7 +146,7 @@ describe('login screen', () => {
     })
     .compileComponents()
     .then(() => {
-      fixture = TestBed.createComponent(LoginComponent);
+      fixture = TestBed.createComponent(SignupComponent);
       component = fixture.componentInstance;
 
       fixture.autoDetectChanges(true);
@@ -135,26 +158,71 @@ describe('login screen', () => {
   /** Tests **/
   it('should build the form on initialisation', () => {
     expect(component.form instanceof FormGroup).toBe(true);
-    expect(loginForm()).not.toBeNull();
+    expect(form()).not.toBeNull();
   });
 
-  it('should attempt login with valid credentials', (done) => {
+  it('should show an error when a display name is too short', () => {
+    expect(displayNameError().properties['hidden']).toBeTruthy('error should be hidden');
+
+    updateDisplayNameValue('a');
+    expect(displayNameError().properties['hidden']).toBeFalsy('error should show');
+
+    updateDisplayNameValue('ab');
+    expect(displayNameError().properties['hidden']).toBeTruthy('error should be hidden');
+  });
+
+  it('should show an error when display name is too long', () => {
+    expect(displayNameError().properties['hidden']).toBeTruthy('error should be hidden');
+
+    // Update display name with 21 "a's" (20 is limit)
+    updateDisplayNameValue('aaaaaaaaaaaaaaaaaaaaa');
+    expect(displayNameError().properties['hidden']).toBeFalsy('error should show');
+
+    updateDisplayNameValue('aaaaa');
+    expect(displayNameError().properties['hidden']).toBeTruthy('error should be hidden');
+  });
+
+  it('should show an error when invalid characters are used in display name', () => {
+    expect(displayNameError().properties['hidden']).toBeTruthy('error should be hidden');
+
+    // Update display name with 21 "a's" (20 is limit)
+    updateDisplayNameValue('aaa!bbb');
+    expect(displayNameError().properties['hidden']).toBeFalsy('error should show');
+
+    updateDisplayNameValue('aaa-bbb');
+    expect(displayNameError().properties['hidden']).toBeTruthy('error should be hidden');
+  });
+
+  it('should attempt signup with valid credentials', (done) => {
+    updateDisplayNameValue('testDisplayName');
     updateEmailValue('test@example.com');
     updatePasswordValue('somepassword1');
 
     clickSubmitButton().then(() => {
+      expect(component.form.get('displayName').value).toBe('testDisplayName');
       expect(component.form.get('email').value).toBe('test@example.com');
       expect(component.form.get('password').value).toBe('somepassword1');
       expect(component.submitted).toBeTruthy();
 
-      const session = fixture.debugElement.injector.get(SessionService);
-      expect(session.get('user').displayName).toBe('testuser');
+      // const session = fixture.debugElement.injector.get(SessionService);
+      // expect(session.get('user').displayName).toBe('testuser');
       done();
     });
 
   });
 
-  it('should not attempt login with an invalid email', () => {
+  it('should show an error when an invalid email is entered', () => {
+    expect(emailError().properties['hidden']).toBeTruthy('error should be hidden');
+
+    // Update display name with 21 "a's" (20 is limit)
+    updateEmailValue('aaaaa');
+    expect(emailError().properties['hidden']).toBeFalsy('error should show');
+
+    updateEmailValue('test@test.com');
+    expect(emailError().properties['hidden']).toBeTruthy('error should be hidden');
+  });
+
+  it('should not attempt signup with an invalid email', () => {
     expect(emailError().properties['hidden']).toBeTruthy('error should be hidden');
 
     updateEmailValue('invalid email');
@@ -169,7 +237,7 @@ describe('login screen', () => {
     expect(emailError().properties['hidden']).toBeFalsy('error should display');
   });
 
-  it('should not attempt login with a password less than 8 characters', () => {
+  it('should not attempt signup with a password less than 8 characters', () => {
     updateEmailValue('test@example.com');
     updatePasswordValue('aaaaaaa');
 
@@ -181,7 +249,7 @@ describe('login screen', () => {
     expect(passwordError().properties['hidden']).toBeFalsy('error should display');
   });
 
-  it('should not attempt to login without a non-numeric character in password', () => {
+  it('should not attempt to signup without a non-numeric character in password', () => {
     updateEmailValue('test@example.com');
     updatePasswordValue('1234567890');
 
@@ -193,7 +261,7 @@ describe('login screen', () => {
     expect(passwordError().properties['hidden']).toBeFalsy('error should display');
   });
 
-  it('should not attempt to login without a numeric character in password', () => {
+  it('should not attempt to signup without a numeric character in password', () => {
     updateEmailValue('test@example.com');
     updatePasswordValue('abcdefghij');
 
@@ -205,7 +273,7 @@ describe('login screen', () => {
     expect(passwordError().properties['hidden']).toBeFalsy('error should display');
   });
 
-  it('should not attempt login with empty passwordy', () => {
+  it('should not attempt signup with empty password', () => {
     updateEmailValue('test@example.com');
     updatePasswordValue('');
 
@@ -214,7 +282,7 @@ describe('login screen', () => {
     expect(passwordError().properties['hidden']).toBeFalsy('should show error');
   });
 
-  it('should not attempt to login with empty email', () => {
+  it('should not attempt to signup with empty email', () => {
     updateEmailValue('');
     updatePasswordValue('somepassword1');
 
@@ -223,16 +291,33 @@ describe('login screen', () => {
     expect(emailError().properties['hidden']).toBeFalsy('should show error');
   });
 
-  it('should show an error when user logs in with invalid credentials', (done) => {
-    updateEmailValue('invalid@example.com');
-    updatePasswordValue('incorrectValue1');
+  it('should show an error when user signs up with existing display name', (done) => {
+    updateDisplayNameValue('testuser');
+    updateEmailValue('valid@example.com');
+    updatePasswordValue('validpassword1');
 
     expect(component.formError).toBe('');
     expect(formErrorMsg().properties['hidden']).toBeTruthy('should not show form error');
 
     clickSubmitButton().then(() => {
       // Ensure we have set an error message
-      expect(component.formError).toBe(FAILED_LOGIN_REASON);
+      expect(component.formError).toBe(FAILED_DUPLICATE_DISPLAYNAME);
+      expect(formErrorMsg().properties['hidden']).toBeFalsy('should show form error');
+      done();
+    });
+  });
+
+  if('should show an error when user signs up with existing email address', () => {
+    updateDisplayNameValue('newuser');
+    updateEmailValue('test@example.com');
+    updatePasswordValue('validpassword1');
+
+    expect(component.formError).toBe('');
+    expect(formErrorMsg().properties['hidden']).toBeTruthy('should not show form error');
+
+    clickSubmitButton().then(() => {
+      // Ensure we have set an error message
+      expect(component.formError).toBe(FAILED_DUPLICATE_EMAIL);
       expect(formErrorMsg().properties['hidden']).toBeFalsy('should show form error');
       done();
     });

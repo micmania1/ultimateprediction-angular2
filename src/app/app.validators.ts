@@ -27,7 +27,7 @@ export const passwordStrengthValidator = (): ValidatorFn => {
 
 export const displayNameValidator = (): ValidatorFn => {
   return (control: AbstractControl): {[key: string]: any} => {
-    const regex = new RegExp(/[a-zA-Z0-9\-_]{20}/);
+    const regex = new RegExp(/^[a-zA-Z0-9\-_]{2,20}$/);
 
     let value = typeof control.value === 'string' ? control.value.trim() : '';
 
