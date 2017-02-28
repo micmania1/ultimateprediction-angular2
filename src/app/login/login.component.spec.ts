@@ -1,5 +1,4 @@
-import { async, inject, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -7,6 +6,7 @@ import { AppState } from '../app.service';
 import { SessionService, ApiService, AuthGuardService, AuthService } from '../services';
 import { LoginComponent } from './login.component';
 import { Toolbar, FacebookButton, TwitterButton } from '../components';
+import { LoginPageObject } from '../testing';
 
 const FAILED_LOGIN_REASON = 'Invalid username or password.';
 
@@ -34,70 +34,7 @@ class MockApiService {
 
 describe('login screen', () => {
 
-  let fixture;
-  let component;
-
-  /** Helpers **/
-  const getElementByReference = (el: string): any => {
-    return fixture.debugElement.query(de => de.references[el]);
-  };
-
-  const updateInputValue = (input: HTMLInputElement, value: any, blur: boolean = true) => {
-    input.value = value;
-    input.dispatchEvent(new Event('input'));
-
-    // If blur is set to true we'll trigger the blur event after updating the value
-    if(blur) {
-      input.dispatchEvent(new Event('blur'));
-    }
-
-    return fixture.whenStable();
-  }
-
-  /** Elements **/
-  const loginForm = (): any => {
-    return getElementByReference('loginForm');
-  }
-
-  const formErrorMsg = (): any => {
-    return getElementByReference('formErrorMsg');
-  }
-
-  const emailInput = (): any => {
-    return getElementByReference('emailInput');
-  }
-
-  const emailError = (): any => {
-    return getElementByReference('emailError');
-  }
-
-  const passwordInput = (): any => {
-    return getElementByReference('passwordInput');
-  }
-
-  const passwordError = (): any => {
-    return getElementByReference('passwordError');
-  }
-
-  const submitButton = (): any => {
-    return getElementByReference('submitButton');
-  }
-
-  /** Actions **/
-  const updateEmailValue = (value: string, blur: boolean = true): any => {
-    const input = emailInput().nativeElement;
-    return updateInputValue(input, value, blur);
-  }
-
-  const updatePasswordValue = (value: string, blur: boolean = true): void => {
-    const input = passwordInput().nativeElement;
-    return updateInputValue(input, value, blur);
-  }
-
-  const clickSubmitButton = (): any => {
-    submitButton().nativeElement.click();
-    return fixture.whenStable();
-  }
+  let page: LoginPageObject;
 
   /** Setup **/
   beforeEach(async(() => {
@@ -123,31 +60,31 @@ describe('login screen', () => {
     })
     .compileComponents()
     .then(() => {
-      fixture = TestBed.createComponent(LoginComponent);
-      component = fixture.componentInstance;
+      let fixture = TestBed.createComponent(LoginComponent);
+      page = new LoginPageObject(fixture);
 
-      fixture.autoDetectChanges(true);
+      expect(page.component.submitted).toBe(false);
 
-      expect(component.submitted).toBe(false);
+      // Register
     });
   }));
 
   /** Tests **/
   it('should build the form on initialisation', () => {
-    expect(component.form instanceof FormGroup).toBe(true);
-    expect(loginForm()).not.toBeNull();
+    expect(page.component.form instanceof FormGroup).toBe(true);
+    expect(page.form()).not.toBeNull();
   });
 
   it('should attempt login with valid credentials', (done) => {
-    updateEmailValue('test@example.com');
-    updatePasswordValue('somepassword1');
+    page.updateEmailValue('test@example.com');
+    page.updatePasswordValue('somepassword1');
 
-    clickSubmitButton().then(() => {
-      expect(component.form.get('email').value).toBe('test@example.com');
-      expect(component.form.get('password').value).toBe('somepassword1');
-      expect(component.submitted).toBeTruthy();
+    page.clickSubmitButton().then(() => {
+      expect(page.component.form.get('email').value).toBe('test@example.com');
+      expect(page.component.form.get('password').value).toBe('somepassword1');
+      expect(page.component.submitted).toBeTruthy();
 
-      const session = fixture.debugElement.injector.get(SessionService);
+      const session = page.service(SessionService);
       expect(session.get('user').displayName).toBe('testuser');
       done();
     });
@@ -155,85 +92,85 @@ describe('login screen', () => {
   });
 
   it('should not attempt login with an invalid email', () => {
-    expect(emailError().properties['hidden']).toBeTruthy('error should be hidden');
+    expect(page.emailError().properties['hidden']).toBeTruthy('error should be hidden');
 
-    updateEmailValue('invalid email');
-    updatePasswordValue('somevalidpassword1');
+    page.updateEmailValue('invalid email');
+    page.updatePasswordValue('somevalidpassword1');
 
-    expect(component.form.status).toBe('INVALID');
-    expect(component.form.get('email').status).toBe('INVALID');
+    expect(page.component.form.status).toBe('INVALID');
+    expect(page.component.form.get('email').status).toBe('INVALID');
 
-    clickSubmitButton();
+    page.clickSubmitButton();
 
-    expect(component.submitted).toBe(false, 'the form should not be submitted');
-    expect(emailError().properties['hidden']).toBeFalsy('error should display');
+    expect(page.component.submitted).toBe(false, 'the form should not be submitted');
+    expect(page.emailError().properties['hidden']).toBeFalsy('error should display');
   });
 
   it('should not attempt login with a password less than 8 characters', () => {
-    updateEmailValue('test@example.com');
-    updatePasswordValue('aaaaaaa');
+    page.updateEmailValue('test@example.com');
+    page.updatePasswordValue('aaaaaaa');
 
-    expect(component.form.status).toBe('INVALID');
-    expect(component.form.get('password').status).toBe('INVALID');
+    expect(page.component.form.status).toBe('INVALID');
+    expect(page.component.form.get('password').status).toBe('INVALID');
 
-    clickSubmitButton();
-    expect(component.submitted).toBe(false);
-    expect(passwordError().properties['hidden']).toBeFalsy('error should display');
+    page.clickSubmitButton();
+    expect(page.component.submitted).toBe(false);
+    expect(page.passwordError().properties['hidden']).toBeFalsy('error should display');
   });
 
   it('should not attempt to login without a non-numeric character in password', () => {
-    updateEmailValue('test@example.com');
-    updatePasswordValue('1234567890');
+    page.updateEmailValue('test@example.com');
+    page.updatePasswordValue('1234567890');
 
-    expect(component.form.status).toBe('INVALID');
-    expect(component.form.get('password').status).toBe('INVALID');
+    expect(page.component.form.status).toBe('INVALID');
+    expect(page.component.form.get('password').status).toBe('INVALID');
 
-    clickSubmitButton();
-    expect(component.submitted).toBe(false);
-    expect(passwordError().properties['hidden']).toBeFalsy('error should display');
+    page.clickSubmitButton();
+    expect(page.component.submitted).toBe(false);
+    expect(page.passwordError().properties['hidden']).toBeFalsy('error should display');
   });
 
   it('should not attempt to login without a numeric character in password', () => {
-    updateEmailValue('test@example.com');
-    updatePasswordValue('abcdefghij');
+    page.updateEmailValue('test@example.com');
+    page.updatePasswordValue('abcdefghij');
 
-    expect(component.form.status).toBe('INVALID');
-    expect(component.form.get('password').status).toBe('INVALID');
+    expect(page.component.form.status).toBe('INVALID');
+    expect(page.component.form.get('password').status).toBe('INVALID');
 
-    clickSubmitButton();
-    expect(component.submitted).toBe(false);
-    expect(passwordError().properties['hidden']).toBeFalsy('error should display');
+    page.clickSubmitButton();
+    expect(page.component.submitted).toBe(false);
+    expect(page.passwordError().properties['hidden']).toBeFalsy('error should display');
   });
 
   it('should not attempt login with empty passwordy', () => {
-    updateEmailValue('test@example.com');
-    updatePasswordValue('');
+    page.updateEmailValue('test@example.com');
+    page.updatePasswordValue('');
 
-    expect(submitButton().properties['disabled']).toBeTruthy('submit button should be disabled');
+    expect(page.submitButton().properties['disabled']).toBeTruthy('submit button should be disabled');
 
-    expect(passwordError().properties['hidden']).toBeFalsy('should show error');
+    expect(page.passwordError().properties['hidden']).toBeFalsy('should show error');
   });
 
   it('should not attempt to login with empty email', () => {
-    updateEmailValue('');
-    updatePasswordValue('somepassword1');
+    page.updateEmailValue('');
+    page.updatePasswordValue('somepassword1');
 
-    expect(submitButton().properties['disabled']).toBeTruthy('submit button should be disabled');
+    expect(page.submitButton().properties['disabled']).toBeTruthy('submit button should be disabled');
 
-    expect(emailError().properties['hidden']).toBeFalsy('should show error');
+    expect(page.emailError().properties['hidden']).toBeFalsy('should show error');
   });
 
   it('should show an error when user logs in with invalid credentials', (done) => {
-    updateEmailValue('invalid@example.com');
-    updatePasswordValue('incorrectValue1');
+    page.updateEmailValue('invalid@example.com');
+    page.updatePasswordValue('incorrectValue1');
 
-    expect(component.formError).toBe('');
-    expect(formErrorMsg().properties['hidden']).toBeTruthy('should not show form error');
+    expect(page.component.formError).toBe('');
+    expect(page.formErrorMsg().properties['hidden']).toBeTruthy('should not show form error');
 
-    clickSubmitButton().then(() => {
+    page.clickSubmitButton().then(() => {
       // Ensure we have set an error message
-      expect(component.formError).toBe(FAILED_LOGIN_REASON);
-      expect(formErrorMsg().properties['hidden']).toBeFalsy('should show form error');
+      expect(page.component.formError).toBe(FAILED_LOGIN_REASON);
+      expect(page.formErrorMsg().properties['hidden']).toBeFalsy('should show form error');
       done();
     });
   });
