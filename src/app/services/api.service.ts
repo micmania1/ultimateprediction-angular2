@@ -26,12 +26,4 @@ export class ApiService {
     });
   }
 
-  public lostPassword(email: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      console.info('lostpassword attempted: ' + email);
-      // reject('Something is wrong. eg. non-200 response');
-      resolve( {} );
-    });
-  }
-
 }
