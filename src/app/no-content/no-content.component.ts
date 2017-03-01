@@ -9,5 +9,4 @@ import { ROUTE_MAP } from '../app.routes';
 })
 export class NoContentComponent {
   pageTitle: string = 'Not Found';
-  homeLink: string = ROUTE_MAP['HOME'];
 }

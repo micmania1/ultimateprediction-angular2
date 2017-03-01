@@ -1,4 +1,5 @@
 import { Component, Input, Output } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { AppState} from '../../app.service';
 import { AuthService } from '../../services';
@@ -21,7 +22,11 @@ export class Toolbar {
   @Input() leftNavLink: string = '';
   @Input() rightNavLink: string = '';
 
-  constructor(private state: AppState, private auth: AuthService) {}
+  constructor(
+    private state: AppState,
+    private auth: AuthService,
+    private location: Location
+  ) {}
 
   public closeMenu() {
     this.state.set('showNavigation', false);
@@ -45,5 +50,9 @@ export class Toolbar {
       ]);
       this.state.set('showNavigation', true);
     }
+  }
+
+  public navigateBack() {
+    this.location.back();
   }
 }
