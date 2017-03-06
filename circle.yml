@@ -7,10 +7,10 @@ machine:
 dependencies:
   pre:
     - npm install -g yarn
-    - npm install -g angular-cli
+    - npm install -g @angular/cli
   override:
     - yarn install
 
 test:
   override:
-    - ng test --watch false --code-coverage true --single-run true
+    - ng test --single-run true --progress false --code-coverage true
