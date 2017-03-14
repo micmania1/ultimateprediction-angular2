@@ -5,12 +5,11 @@ machine:
     version: 7.5.0
 
 dependencies:
-  pre:
-    - npm install -g yarn
-    - npm install -g @angular/cli
   override:
-    - yarn install
+    - rm -rf node_modules
+    - npm cache clean
+    - npm install
 
 test:
   override:
-    - ng test --single-run true --progress false --code-coverage true
+    - npm run ng test -- --single-run true --progress false
