@@ -12,7 +12,9 @@ import {
   emailValidator,
   passwordStrengthValidator,
   displayNameValidator } from '../app.validators';
-import { FacebookButton, TwitterButton, AbstractForm } from '../components';
+import { AbstractForm } from '../forms';
+import { FacebookButton } from '../facebook-button';
+import { TwitterButton } from '../twitter-button';
 import { ApiService, AuthService, SessionService } from '../services';
 
 @Component({

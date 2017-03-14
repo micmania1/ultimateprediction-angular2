@@ -1,8 +1,8 @@
 import { Component, Input, Output } from '@angular/core';
 
-import { AppState} from '../../app.service';
-import { AuthService } from '../../services';
-import { ROUTE_MAP } from '../../app.routes';
+import { AppState} from '../app.service';
+import { AuthService } from '../services';
+import { ROUTE_MAP } from '../app.routes';
 
 @Component({
   selector: 'toolbar',

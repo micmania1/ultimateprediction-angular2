@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AppState } from '../../app.service';
-import { NavigationList } from '../../app.types';
+import { AppState } from '../app.service';
+import { NavigationList } from '../app.types';
 
 @Component({
   selector: 'navigation-list',

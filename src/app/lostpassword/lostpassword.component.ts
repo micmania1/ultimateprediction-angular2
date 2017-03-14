@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ROUTE_MAP } from '../app.routes';
 import { emailValidator } from '../app.validators';
 import { ApiService } from '../services/api.service';
-import { AbstractForm } from '../components';
+import { AbstractForm } from '../forms';
 
 @Component({
   selector: 'lostpassword',

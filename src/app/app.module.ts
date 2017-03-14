@@ -19,12 +19,11 @@ import { SignupComponent } from './signup';
 import { DashboardComponent } from './dashboard';
 import { NoContentComponent } from './no-content';
 
-import {
-  Toolbar,
-  FacebookButton,
-  TwitterButton,
-  NavigationListComponent,
-  PositionWidget } from './components';
+import { FacebookButton } from './facebook-button';
+import { TwitterButton } from './twitter-button';
+import { NavigationListComponent } from './navigation-list';
+import { PositionWidget } from './position-widget';
+import { Toolbar } from './toolbar';
 
 import {
   ApiService,

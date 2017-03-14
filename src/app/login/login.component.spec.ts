@@ -5,8 +5,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppState } from '../app.service';
 import { SessionService, ApiService, AuthGuardService, AuthService } from '../services';
 import { LoginComponent } from './login.component';
-import { Toolbar, FacebookButton, TwitterButton } from '../components';
+import { Toolbar } from '../toolbar';
 import { LoginPageObject } from '../testing';
+import { FacebookButton } from '../facebook-button';
+import { TwitterButton } from '../twitter-button';
 
 const FAILED_LOGIN_REASON = 'Invalid username or password.';
 
@@ -64,8 +66,6 @@ describe('login screen', () => {
       page = new LoginPageObject(fixture);
 
       expect(page.component.submitted).toBe(false);
-
-      // Register
     });
   }));
 

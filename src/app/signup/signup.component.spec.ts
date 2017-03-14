@@ -7,7 +7,9 @@ import { SignupPageObject } from '../testing';
 import { AppState } from '../app.service';
 import { SessionService, ApiService, AuthGuardService, AuthService } from '../services';
 import { SignupComponent } from './signup.component';
-import { Toolbar, FacebookButton, TwitterButton } from '../components';
+import { Toolbar } from '../toolbar';
+import { TwitterButton } from '../twitter-button';
+import { FacebookButton } from '../facebook-button';
 
 const FAILED_DUPLICATE_EMAIL = 'duplicate email error';
 const FAILED_DUPLICATE_DISPLAYNAME = 'duplicate display name error';
@@ -74,7 +76,7 @@ describe('signup screen', () => {
       let fixture = TestBed.createComponent(SignupComponent);
       page = new SignupPageObject(fixture);
 
-      expect(page.component.submitted).toBe(false);
+      return expect(page.component.submitted).toBe(false);
     });
   }));
 

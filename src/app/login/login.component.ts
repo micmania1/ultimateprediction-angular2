@@ -5,7 +5,10 @@ import { Router } from '@angular/router';
 import { ROUTE_MAP } from '../app.routes';
 import { MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH } from '../app.config';
 import { emailValidator, passwordStrengthValidator } from '../app.validators';
-import { Toolbar, FacebookButton, TwitterButton, AbstractForm } from '../components';
+import { AbstractForm } from '../forms';
+import { Toolbar } from '../toolbar';
+import { TwitterButton } from '../twitter-button';
+import { FacebookButton } from '../facebook-button';
 import { ApiService, AuthService, SessionService } from '../services';
 import { User } from '../model';
 

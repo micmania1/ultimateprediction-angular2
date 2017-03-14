@@ -7,7 +7,7 @@ import { LostPasswordPageObject } from '../testing';
 import { AppState } from '../app.service';
 import { SessionService, ApiService, AuthGuardService, AuthService } from '../services';
 import { LostPasswordComponent } from './lostpassword.component';
-import { Toolbar } from '../components';
+import { Toolbar } from '../toolbar';
 
 const FAILED_LOGIN_REASON = 'Invalid username or password.';
 

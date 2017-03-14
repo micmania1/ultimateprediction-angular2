@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { StandingsSummary } from '../../app.types';
-import { NumeralPipe } from '../../numeral.pipe';
+import { StandingsSummary } from '../app.types';
+import { NumeralPipe } from '../numeral.pipe';
 
 @Component({
   selector: 'position-widget',
