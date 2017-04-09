@@ -1,0 +1,23 @@
+.logo {
+  margin-bottom: 2rem;
+  transform: rotate(180deg);
+
+  // Rotate the inner text another 180 degrees so its the right way around
+  .sr-only {
+    transform: rotate(180deg);
+  }
+}
+
+.content {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  text-align: center;
+
+  h3 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    font-family: 'Georgia, Times, serif';
+  }
+}
+

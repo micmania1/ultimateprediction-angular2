@@ -1,0 +1,24 @@
+<toolbar [title]="pageTitle" leftMenu="competitions" rightMenu="user"></toolbar>
+
+<div class="dashboard">
+
+  <div class="row positions">
+    <div class="col-6 dashboard__widget" *ngIf="standings_widget_1">
+      <position-widget [standings]="standings_widget_1" style="blue"></position-widget>
+    </div>
+
+    <div class="col-6 dashboard__widget" *ngIf="standings_widget_2">
+      <position-widget [standings]="standings_widget_2" style="pink"></position-widget>
+    </div>
+  </div>
+
+  <div class="row upcoming">
+    <div class="col">
+      <prediction-progress
+        [matches]="upcomingMatchesCount"
+        [predictions]="upcomingPredictionsCount">
+      </prediction-progress>
+    </div>
+  </div>
+
+</div>

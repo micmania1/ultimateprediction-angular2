@@ -1,0 +1,15 @@
+machine:
+  timezone:
+    Pacific/Auckland
+  node:
+    version: 7.5.0
+
+dependencies:
+  override:
+    - rm -rf node_modules
+    - npm cache clean
+    - npm install
+
+test:
+  override:
+    - npm run ng test -- --single-run true --progress false

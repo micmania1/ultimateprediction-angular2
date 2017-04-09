@@ -1,0 +1,55 @@
+@import '../../scss/variables';
+
+.widget {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &__pos {
+    flex-basis: 1 100%;
+    font-size: 2rem;
+    height: 10rem;
+    padding: 3rem 0;
+
+    .of {
+      display: block;
+      font-size: 1.2rem;
+    }
+  }
+
+  &__title {
+    flex-basis: 1 100%;
+    line-height: 2.5rem;
+    font-size: 1.2rem;
+  }
+
+  &--blue {
+    background: $brand-color-blue;
+
+    .widget__title {
+      background: darken($brand-color-blue, 15%);
+    }
+
+    .widget__pos .of {
+      color: lighten($brand-color-blue, 30%);
+    }
+  }
+
+  &--pink {
+    background: $brand-color-pink;
+
+    .widget__title {
+      background: darken($brand-color-pink, 15%);
+    }
+
+    .widget__pos .of {
+      color: lighten($brand-color-pink, 30%);
+    }
+  }
+}

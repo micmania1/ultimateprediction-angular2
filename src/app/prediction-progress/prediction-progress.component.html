@@ -1,0 +1,21 @@
+<h3 class="title">Upcoming games</h3>
+
+<ngb-progressbar
+  [type]="percentComplete === 100 ? 'success' : 'warning'"
+  showValue="true"
+  [value]="percentComplete">
+</ngb-progressbar>
+
+<p class="num-predictions text-warning"
+  [hidden]="percentComplete === 100">
+  <i class="fa fa-warning"></i>
+  {{ predictions }} out of {{ matches }} predictions made
+</p>
+<p class="num-predictions text-success"
+  [hidden]="percentComplete !== 100">
+  <i class="fa fa-check"></i> All predictions up to date
+</p>
+
+<a class="btn btn-block btn-primary predictions" [routerLink]="predictionsLink">
+  My predictions <i class="fa fa-arrow-circle-right"></i>
+</a>

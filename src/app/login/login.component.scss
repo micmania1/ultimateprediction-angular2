@@ -1,0 +1,18 @@
+@import '../../scss/variables';
+
+.login-form {
+  margin-top: $row-spacing / 2;
+}
+
+.login-form + .social-login {
+  margin-top: $row-spacing;
+}
+
+.login-help {
+  margin-top: $row-spacing;
+  margin-bottom: $row-spacing;
+}
+
+.social-button + .social-button {
+  margin-top: 0.5rem;
+}
